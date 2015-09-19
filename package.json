@@ -1,0 +1,26 @@
+{
+  "name": "node-red-contrib-play-audio",
+  "version": "1.0.0",
+  "description": "A node-red node for playing audio in the browser",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lorentzlasson/node-red-contrib-play-audio.git"
+  },
+  "keywords": [
+    "node-red"
+  ],
+  "author": "Lorentz Lasson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lorentzlasson/node-red-contrib-play-audio/issues"
+  },
+  "homepage": "https://github.com/lorentzlasson/node-red-contrib-play-audio",
+  "node-red"     : {
+        "nodes": {
+            "play-audio": "play-audio.js"
+        }
+    }
+}
