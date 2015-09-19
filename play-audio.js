@@ -3,7 +3,7 @@ module.exports = function(RED) {
 		RED.nodes.createNode(this,config);
 		var node = this;
 		this.on('input', function(msg) {
-			RED.comms.publish("playaudiows", msg.payload);
+			RED.comms.publish("playaudio", msg.payload);
 		});
 	}
 	RED.nodes.registerType("play audio", PlayAudioNode);
