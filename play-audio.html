@@ -1,0 +1,59 @@
+
+<script type="text/javascript">
+RED.nodes.registerType('play audio',{
+    category: 'output',
+    color: '#BA8FF7',
+    defaults: {
+        name: {value:""}
+    },
+    inputs:1,
+    outputs:0,
+    icon: "feed.png",
+    align: "right",
+    label: function() {
+        return this.name||"play audio";
+    },
+    onpaletteadd: function() {
+        this.handleDebugMessage = function(t,o) {
+            try {
+                debugger;
+                window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
+                var context = new AudioContext();
+                var source = context.createBufferSource();
+
+                var byteArray = o;
+                var arrayBuffer = new ArrayBuffer(byteArray.length);
+                var bufferView = new Uint8Array(arrayBuffer);
+
+                
+                for (i = 0; i < byteArray.length; i++) {
+                    bufferView[i] = byteArray[i];
+                }
+
+                context.decodeAudioData(arrayBuffer, function(buffer) {
+                    source.buffer = buffer;
+                    source.connect(context.destination);
+                    source.start(0);
+                })                
+            }
+            catch(e)
+            {
+                alert("Error: "+e);
+            }
+
+        };
+        RED.comms.subscribe("playaudiows", this.handleDebugMessage);
+    }
+});
+</script>
+
+<script type="text/x-red" data-template-name="play audio">
+    <div class="form-row">
+        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <input type="text" id="node-input-name" placeholder="Name">
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="play audio">
+    <p>A node to play audio in the browser</p>
+</script>
