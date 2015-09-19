@@ -15,22 +15,16 @@ RED.nodes.registerType('play audio',{
     },
     onpaletteadd: function() {
         this.handleDebugMessage = function(t,o) {
+            var byteArray = o;
             try {
-                debugger;
                 window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
                 var context = new AudioContext();
                 var source = context.createBufferSource();
-
-                var byteArray = o;
-                var arrayBuffer = new ArrayBuffer(byteArray.length);
-                var bufferView = new Uint8Array(arrayBuffer);
-
                 
-                for (i = 0; i < byteArray.length; i++) {
-                    bufferView[i] = byteArray[i];
-                }
+                var buffer = new Uint8Array(byteArray.length);
+                buffer.set(new Uint8Array(byteArray), 0);
 
-                context.decodeAudioData(arrayBuffer, function(buffer) {
+                context.decodeAudioData(buffer.buffer, function(buffer) {
                     source.buffer = buffer;
                     source.connect(context.destination);
                     source.start(0);
@@ -40,7 +34,6 @@ RED.nodes.registerType('play audio',{
             {
                 alert("Error: "+e);
             }
-
         };
         RED.comms.subscribe("playaudio", this.handleDebugMessage);
     }
