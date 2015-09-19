@@ -1,5 +1,3 @@
-var fs = require("fs");
-
 module.exports = function(RED) {
 	function  PlayAudioNode(config) {
 		RED.nodes.createNode(this,config);
