@@ -13,11 +13,12 @@ RED.nodes.registerType('play audio',{
         return this.name||"play audio";
     },
     onpaletteadd: function() {
+		window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
+		var context = new AudioContext();
+
         this.handleAudio = function(t,o) {
             var byteArray = o.data;
             try {
-                window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
-                var context = new AudioContext();
                 var source = context.createBufferSource();
                 
                 var buffer = new Uint8Array(byteArray.length);
