@@ -1,4 +1,3 @@
-
 <script type="text/javascript">
 RED.nodes.registerType('play audio',{
     category: 'output',
@@ -14,7 +13,7 @@ RED.nodes.registerType('play audio',{
         return this.name||"play audio";
     },
     onpaletteadd: function() {
-        this.handleDebugMessage = function(t,o) {
+        this.handleAudio = function(t,o) {
             var byteArray = o.data;
             try {
                 window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
@@ -35,7 +34,7 @@ RED.nodes.registerType('play audio',{
                 alert("Error: "+e);
             }
         };
-        RED.comms.subscribe("playaudio", this.handleDebugMessage);
+        RED.comms.subscribe("playaudio", this.handleAudio);
     }
 });
 </script>
