@@ -15,7 +15,7 @@ RED.nodes.registerType('play audio',{
     },
     onpaletteadd: function() {
         this.handleDebugMessage = function(t,o) {
-            var byteArray = o;
+            var byteArray = o.data;
             try {
                 window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
                 var context = new AudioContext();
