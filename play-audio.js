@@ -10,4 +10,3 @@ module.exports = function(RED) {
 	}
 	RED.nodes.registerType("play audio", PlayAudioNode);
 }
-
