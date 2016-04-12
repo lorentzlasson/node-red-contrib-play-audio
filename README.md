@@ -1,6 +1,6 @@
 # node-red-contrib-play-audio
 
-Node to play audio from a raw audio buffer. Works well togather with the [Watson Text to Speech node](https://github.com/node-red/node-red-node-watson/tree/master/watson),
+Node to play audio from a raw audio buffer. Works well togather with the [Watson Text to Speech node](http://flows.nodered.org/node/node-red-node-watson),
 using the WAV audio format.
 
 ## Install
