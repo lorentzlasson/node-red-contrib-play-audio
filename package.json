@@ -20,7 +20,7 @@
   "homepage": "https://github.com/lorentzlasson/node-red-contrib-play-audio",
   "node-red"     : {
         "nodes": {
-            "play-audio": "play-audio.js"
+            "play audio": "play-audio.js"
         }
     }
 }
