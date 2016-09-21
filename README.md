@@ -3,6 +3,8 @@
 Node to play audio from a raw audio buffer. Works well togather with the [Watson Text to Speech node](http://flows.nodered.org/node/node-red-node-watson),
 using the WAV audio format.
 
+It can also perform Text to Speech on strings if your browser has that capability.
+
 ## Install
 [Available on npm](https://www.npmjs.com/package/node-red-contrib-play-audio)
 
