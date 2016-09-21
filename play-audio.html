@@ -13,29 +13,42 @@ RED.nodes.registerType('play audio',{
         return this.name||"play audio";
     },
     onpaletteadd: function() {
-		window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
-		var context = new AudioContext();
+        window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
+        var context = new AudioContext();
 
         this.handleAudio = function(t,o) {
             var byteArray = o.data;
             try {
                 var source = context.createBufferSource();
-                
                 var buffer = new Uint8Array(byteArray.length);
                 buffer.set(new Uint8Array(byteArray), 0);
-
                 context.decodeAudioData(buffer.buffer, function(buffer) {
                     source.buffer = buffer;
                     source.connect(context.destination);
                     source.start(0);
-                })                
+                })
             }
-            catch(e)
-            {
-                alert("Error: "+e);
+            catch(e) {
+                alert("Error playing audio: "+e);
             }
         };
+
+        this.handleTTS = function(t,o) {
+            if ('speechSynthesis' in window) {
+                var words = new SpeechSynthesisUtterance(o);
+                var voices = window.speechSynthesis.getVoices();
+                for (var i=0; i<voices.length; i++) {
+                    console.log(i,voices[i].name,voices[i].lang,voices[i].voiceURI,voices[i].default);
+                }
+                window.speechSynthesis.speak(words);
+            }
+            else {
+                alert("Your Browser does not support Text-to-Speech");
+            }
+        };
+
         RED.comms.subscribe("playaudio", this.handleAudio);
+        RED.comms.subscribe("playtts", this.handleTTS);
     }
 });
 </script>
@@ -49,5 +62,8 @@ RED.nodes.registerType('play audio',{
 
 <script type="text/x-red" data-help-name="play audio">
     <p>A node to play audio in the browser.</p>
-    <p>The audio buffer should be passed in on <code>msg.payload</code>.</p>
+    <p>To work the editor web page must be open.</p>
+    <p>Expects <code>msg.payload</code> to contain a buffer of a <b>wav</b> file.</p>
+    <p>If your browser has native support for Text-to-Speech then a <code>msg.payload</code>
+    can also be a <b>string</b> to be read aloud.
 </script>
