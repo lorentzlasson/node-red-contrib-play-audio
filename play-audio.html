@@ -40,7 +40,7 @@
             if ('speechSynthesis' in window) { voices = window.speechSynthesis.getVoices(); }
 
             this.handleAudio = function(t,o) {
-                var byteArray = o.data;
+                var byteArray = (o.hasOwnProperty("data")) ? o.data : o;
                 try {
                     var source = context.createBufferSource();
                     var buffer = new Uint8Array(byteArray.length);
