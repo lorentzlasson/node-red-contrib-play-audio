@@ -20,6 +20,8 @@
 (function() {
     var myvoice = 0;
     var voices;
+    var sources = [];
+
     RED.nodes.registerType('play audio',{
         category: 'output',
         color: '#DAAFF7',
@@ -47,8 +49,18 @@
                     buffer.set(new Uint8Array(byteArray), 0);
                     context.decodeAudioData(buffer.buffer, function(buffer) {
                         source.buffer = buffer;
+                        source.onended = function(){
+                            sources = sources.filter(function(s){
+                                if(source === s){
+                                    return false;
+                                } else {
+                                    return true;
+                                }
+                            })
+                        }
                         source.connect(context.destination);
                         source.start(0);
+                        sources.push(source);
                     })
                 }
                 catch(e) {
@@ -90,6 +102,15 @@
             $("#node-input-voice").change(function() {
                 myvoice = this.voice = $("#node-input-voice").val();
             });
+        },
+        button : {
+            enabled : true,
+            onclick : function(){
+                sources = sources.filter(function(source){
+                    source.stop(0);
+                    return false;
+                });
+            }
         }
     });
 })();
@@ -111,5 +132,6 @@
     <p>To work the editor web page must be open.</p>
     <p>Expects <code>msg.payload</code> to contain a buffer of a <b>wav</b> file.</p>
     <p>If your browser has native support for Text-to-Speech then a <code>msg.payload</code>
-    can also be a <b>string</b> to be read aloud.
+    can also be a <b>string</b> to be read aloud.</p>
+    <p>The button will stop the audio that is currently playing.</p>
 </script>
