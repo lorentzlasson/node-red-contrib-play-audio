@@ -18,7 +18,6 @@
 
 <script type="text/javascript">
 (function() {
-    var myvoice = 0;
     var voices;
     var sources = [];
 
@@ -69,9 +68,11 @@
             };
 
             this.handleTTS = function(t,o) {
+                var v = o.split('#',2);
                 if ('speechSynthesis' in window) {
-                    var words = new SpeechSynthesisUtterance(o);
-                    words.voice = voices[myvoice];
+                    voices = window.speechSynthesis.getVoices();
+                    var words = new SpeechSynthesisUtterance(v[1]);
+                    words.voice = voices[parseInt(v[0])];
                     window.speechSynthesis.speak(words);
                 }
                 else {
@@ -98,10 +99,6 @@
             else {
                 $('#voice-input-row').hide();
             }
-
-            $("#node-input-voice").change(function() {
-                myvoice = this.voice = $("#node-input-voice").val();
-            });
         },
         button : {
             enabled : true,

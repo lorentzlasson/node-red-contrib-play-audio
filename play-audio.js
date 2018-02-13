@@ -18,13 +18,14 @@
 module.exports = function(RED) {
     function PlayAudioNode(config) {
         RED.nodes.createNode(this,config);
+        this.voice = config.voice || 0;
         var node = this;
         this.on('input', function(msg) {
             if (Buffer.isBuffer(msg.payload)) {
                 RED.comms.publish("playaudio", msg.payload);
             }
             else if (typeof msg.payload === "string") {
-                RED.comms.publish("playtts", msg.payload);
+                RED.comms.publish("playtts", node.voice+"#"+msg.payload);
             }
         });
     }
