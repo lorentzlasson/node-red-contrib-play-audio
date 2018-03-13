@@ -48,19 +48,18 @@
                     buffer.set(new Uint8Array(byteArray), 0);
                     context.decodeAudioData(buffer.buffer, function(buffer) {
                         source.buffer = buffer;
-                        source.onended = function(){
-                            sources = sources.filter(function(s){
-                                if(source === s){
-                                    return false;
-                                } else {
-                                    return true;
-                                }
-                            })
+                        source.onended = function() {
+                            $.getJSON('playaudio',function() { });
+                            sources = sources.filter(function(s) {
+                                if (source === s) { return false; }
+                                else { return true; }
+                            });
+
                         }
                         source.connect(context.destination);
                         source.start(0);
                         sources.push(source);
-                    })
+                    });
                 }
                 catch(e) {
                     alert("Error playing audio: "+e);
@@ -74,6 +73,9 @@
                     var words = new SpeechSynthesisUtterance(v[1]);
                     words.voice = voices[parseInt(v[0])];
                     window.speechSynthesis.speak(words);
+                    words.onend = function(event) {
+                        $.getJSON('playaudio',function() { });
+                    }
                 }
                 else {
                     alert("Your Browser does not support Text-to-Speech");
@@ -102,8 +104,8 @@
         },
         button : {
             enabled : true,
-            onclick : function(){
-                sources = sources.filter(function(source){
+            onclick : function() {
+                sources = sources.filter(function(source) {
                     source.stop(0);
                     return false;
                 });

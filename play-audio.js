@@ -16,10 +16,12 @@
  **/
 
 module.exports = function(RED) {
+    var playaudionodeid;
     function PlayAudioNode(config) {
         RED.nodes.createNode(this,config);
         this.voice = config.voice || 0;
         var node = this;
+        playaudionodeid = this.id;
         this.on('input', function(msg) {
             if (Buffer.isBuffer(msg.payload)) {
                 RED.comms.publish("playaudio", msg.payload);
@@ -27,7 +29,13 @@ module.exports = function(RED) {
             else if (typeof msg.payload === "string") {
                 RED.comms.publish("playtts", node.voice+"#"+msg.payload);
             }
+            node.status({fill:"blue",shape:"dot",text:"playing"});
         });
     }
     RED.nodes.registerType("play audio", PlayAudioNode);
+    RED.httpAdmin.get("/playaudio", RED.auth.needsPermission('playaudio.read'), function(req,res) {
+        var node = RED.nodes.getNode(playaudionodeid);
+        if (node != null) { node.status({}); }
+        res.json("OK");
+    });
 }
