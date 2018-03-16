@@ -25,11 +25,12 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             if (Buffer.isBuffer(msg.payload)) {
                 RED.comms.publish("playaudio", msg.payload);
+                node.status({fill:"blue",shape:"dot",text:"playAudio.status.playing"});
             }
             else if (typeof msg.payload === "string") {
                 RED.comms.publish("playtts", node.voice+"#"+msg.payload);
+                node.status({fill:"blue",shape:"dot",text:"playAudio.status.speaking"});
             }
-            node.status({fill:"blue",shape:"dot",text:"playing"});
         });
     }
     RED.nodes.registerType("play audio", PlayAudioNode);
