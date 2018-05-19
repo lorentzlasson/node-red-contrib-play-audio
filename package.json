@@ -1,6 +1,6 @@
 {
   "name": "node-red-contrib-play-audio",
-  "version": "2.3.1",
+  "version": "2.3.2",
   "description": "A node-red node for playing audio in the browser",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -10,21 +10,25 @@
     "url": "https://github.com/lorentzlasson/node-red-contrib-play-audio.git"
   },
   "keywords": [
-    "node-red", "audio", "TTS", "text-to-speech"
+    "node-red",
+    "audio",
+    "TTS",
+    "text-to-speech"
   ],
   "author": "Lorentz Lasson",
-  "contributors": [ {
+  "contributors": [
+    {
       "name": "Dave Conway-Jones"
-      }
+    }
   ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/lorentzlasson/node-red-contrib-play-audio/issues"
   },
   "homepage": "https://github.com/lorentzlasson/node-red-contrib-play-audio",
-  "node-red"     : {
-        "nodes": {
-            "play-audio": "play-audio.js"
-        }
+  "node-red": {
+    "nodes": {
+      "play-audio": "play-audio.js"
     }
+  }
 }

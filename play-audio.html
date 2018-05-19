@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!--
   Copyright 2015 Lorentz Lasson
-  Copyright 2015, 2016 Lorentz Lasson, Dave Conway-Jones
+  Copyright 2015, 2016, 2018 Lorentz Lasson, Dave Conway-Jones
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -42,28 +42,45 @@
 
             this.handleAudio = function(t,o) {
                 var byteArray = (o.hasOwnProperty("data")) ? o.data : o;
-                try {
-                    var source = context.createBufferSource();
-                    var buffer = new Uint8Array(byteArray.length);
-                    buffer.set(new Uint8Array(byteArray), 0);
-                    context.decodeAudioData(buffer.buffer, function(buffer) {
-                        source.buffer = buffer;
-                        source.onended = function() {
-                            $.getJSON('playaudio',function() { });
-                            sources = sources.filter(function(s) {
-                                if (source === s) { return false; }
-                                else { return true; }
-                            });
 
+                ( function () {
+                    return new Promise(function resolver(resolve, reject) {
+                        if ('running' === context.state) {
+                            resolve();
+                        } else {
+                            context.resume().then(() => {
+                                resolve();
+                            })
                         }
-                        source.connect(context.destination);
-                        source.start(0);
-                        sources.push(source);
                     });
-                }
-                catch(e) {
-                    alert("Error playing audio: "+e);
-                }
+                }()).then(() => {
+                  try {
+                      var source = context.createBufferSource();
+                      var buffer = new Uint8Array(byteArray.length);
+                      buffer.set(new Uint8Array(byteArray), 0);
+                      context.decodeAudioData(buffer.buffer, function(buffer) {
+                          source.buffer = buffer;
+                          source.onended = function() {
+                              $.getJSON('playaudio',function() { });
+                              sources = sources.filter(function(s) {
+                                  if (source === s) { return false; }
+                                  else { return true; }
+                              });
+
+                          }
+                          source.connect(context.destination);
+                          source.start(0);
+                          sources.push(source);
+                      });
+                  }
+                  catch(e) {
+                      alert("Error playing audio: "+e);
+                  }
+                }).catch((e)=> {
+                    alert("Audio context error: "+e);
+                });
+
+
             };
 
             this.handleTTS = function(t,o) {
