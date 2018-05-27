@@ -45,12 +45,12 @@
 
                 ( function () {
                     return new Promise(function resolver(resolve, reject) {
-                        if ('running' === context.state) {
-                            resolve();
-                        } else {
+                        if (context.state && 'running' !== context.state && context.resume) {
                             context.resume().then(() => {
                                 resolve();
                             })
+                        } else {
+                          resolve();
                         }
                     });
                 }()).then(() => {
