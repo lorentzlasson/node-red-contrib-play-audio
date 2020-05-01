@@ -36,11 +36,9 @@
             return this.name||"play audio";
         },
         onpaletteadd: function() {
-            window.AudioContext = window.AudioContext||window.webkitAudioContext||window.mozAudioContext;
-            var context = new AudioContext();
-            if ('speechSynthesis' in window) { voices = window.speechSynthesis.getVoices(); }
 
             this.handleAudio = function(t,o) {
+                var context = new AudioContext();
                 var byteArray = (o.hasOwnProperty("data")) ? o.data : o;
 
                 ( function () {
@@ -58,6 +56,7 @@
                       var source = context.createBufferSource();
                       var buffer = new Uint8Array(byteArray.length);
                       buffer.set(new Uint8Array(byteArray), 0);
+                      source.addEventListener('ended', () => { context.close(); context = undefined; }, {capture:false, once:true});
                       context.decodeAudioData(buffer.buffer, function(buffer) {
                           source.buffer = buffer;
                           source.onended = function() {
@@ -66,7 +65,6 @@
                                   if (source === s) { return false; }
                                   else { return true; }
                               });
-
                           }
                           source.connect(context.destination);
                           source.start(0);
@@ -79,8 +77,6 @@
                 }).catch((e)=> {
                     alert("Audio context error: "+e);
                 });
-
-
             };
 
             this.handleTTS = function(t,o) {
@@ -132,7 +128,7 @@
 })();
 </script>
 
-<script type="text/x-red" data-template-name="play audio">
+<script type="text/html" data-template-name="play audio">
 <div class="form-row" id="voice-input-row">
     <label for="node-input-voice"><i class="fa fa-language"></i> <span data-i18n="playAudio.label.ttsVoice"></label>
     <select id="node-input-voice"></select>
